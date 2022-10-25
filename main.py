@@ -25,11 +25,17 @@ from bilateral_filtering import sparse_bilateral_filtering
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='argument.yml',help='Configure of post processing')
+parser.add_argument('--src_folder', type=str, default=None, help='In time reset src folder')
+parser.add_argument('--video_folder', type=str, default=None, help='In time reset output folder')
 args = parser.parse_args()
 config = yaml.load(open(args.config, 'r'))
 if config['offscreen_rendering'] is True:
     vispy.use(app='egl')
+if args.src_folder:
+    config['src_folder'] = args.src_folder
 os.makedirs(config['mesh_folder'], exist_ok=True)
+if args.video_folder:
+    config['video_folder'] = args.src_folder
 os.makedirs(config['video_folder'], exist_ok=True)
 os.makedirs(config['depth_folder'], exist_ok=True)
 sample_list = get_MiDaS_samples(config['src_folder'], config['depth_folder'], config, config['specific'])
